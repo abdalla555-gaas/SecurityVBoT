@@ -26,12 +26,12 @@ jobs:
     # Port Forwarding with FRP
     - name: Start FRP Proxy
       run: |
-        frpc -c frpc.ini
+        frpc -c frpc.toml
 
     # Extract tar file
     - name: Extract tar file
       run: |
-        tar -xzf your_file.tar.gz
+        tar -xzf frp_0.37.0_linux_amd64.tar.gz
 
     # Edit frpc.toml
     - name: Edit frpc.toml
