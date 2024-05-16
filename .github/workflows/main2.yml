@@ -18,28 +18,14 @@ jobs:
     # Install FRP
     - name: Install FRP
       run: |
-        wget https://github.com/fatedier/frp/releases/download/v0.37.0/frp_0.37.0_linux_amd64.tar.gz
-        tar -xzf frp_0.37.0_linux_amd64.tar.gz
-        chmod +x frp_0.37.0_linux_amd64/frpc
-        mv frp_0.37.0_linux_amd64/frpc /usr/local/bin/frpc
-
-    # Port Forwarding with FRP
-    - name: Start FRP Proxy
-      run: |
-        frpc -c frpc.toml
-
-    # Extract tar file
-    - name: Extract tar file
-      run: |
-        tar -xzf frp_0.37.0_linux_amd64.tar.gz
-
-    # Edit frpc.toml
-    - name: Edit frpc.toml
-      run: |
-        sed -i 's/serverAddr = ""/serverAddr = "213.130.144.44"/g' frpc.toml
-        sed -i 's/serverPort = 0/serverPort = 7000/g' frpc.toml
-        sed -i '/\[proxies\]/a [[proxies]]\nname = "test-tcp"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 22\nremotePort = 6000' frpc.toml
-
+        mkdir /t/
+        wget https://github.com/fatedier/frp/releases/download/v0.58.0/frp_0.58.0_linux_amd64.tar.gz /t/
+        cd /t/ && tar -xzf frp_0.58.0_linux_amd64.tar.gz
+        cd /t/ && chmod +x frp_0.58.0_linux_amd64.tar.gz
+        cd /t/fr* && sed -i 's/serverAddr = ""/serverAddr = "213.130.144.44"/g' frpc.toml
+        cd /t/fr* sed -i 's/serverPort = 0/serverPort = 7000/g' frpc.toml
+        cd /t/fr* sed -i '/\[proxies\]/a [[proxies]]\nname = "test-tcp"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 22\nremotePort = 6000' frpc.toml
+        /t/frp_0.58.0_linux_amd64/frpc -c frpc.toml
     # Run frpc
     - name: Run frpc
       run: |
