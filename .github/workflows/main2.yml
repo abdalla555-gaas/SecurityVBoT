@@ -25,4 +25,4 @@ jobs:
         sed -i 's/serverAddr = ""/serverAddr = "213.130.144.44"/g' frp/frpc.ini
         sed -i 's/serverPort = 0/serverPort = 7000/g' frp/frpc.ini
         sed -i '/\[proxies\]/a [[proxies]]\nname = "test-tcp"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 22\nremotePort = 6000' frp/frpc.ini
-        ./frp/frpc -c frp/frpc.ini
+        ./frp/frpc -c ./frp/frpc.ini
