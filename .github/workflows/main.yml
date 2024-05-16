@@ -11,7 +11,7 @@ jobs:
     - name: Deploy to <your domain>
       uses: appleboy/ssh-action@master
       with:
-        username: root
-        host: root
+        username: roots
+        host: roots
         password: ${{ secrets.SSH_PASSWORD }}
         script: 'cd /var/www/html && ./server_deploy.sh'
